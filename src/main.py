@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 
@@ -11,7 +12,7 @@ TAMANO_MUESTRA = 100000  # Cantidad de canciones para la muestra final
 # CARGAR DATOS
 # ============================================
 print("📀 Cargando dataset...")
-df = pd.read_csv('./../data/rawuniversal_top_spotify_songs.csv')
+df = pd.read_csv('./../data/raw/universal_top_spotify_songs.csv')
 print(f"✅ Dataset cargado: {len(df):,} canciones")
 
 # ============================================
