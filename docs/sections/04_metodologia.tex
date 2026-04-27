@@ -1,34 +1,97 @@
 % ========== sections/04_metodologia.tex ==========
 \section{Metodología}
 
-[INDICACIÓN: Según la diapositiva, esta sección debe detallar el procedimiento de investigación. Podemos estructurarla siguiendo el ciclo de vida de Ciencia de Datos.]
+% ========== subsection/01 ==========
+\subsection{Adquisición del conjunto de datos}
 
-\subsection{Adquisición y caracterización del dataset}
+El conjunto de datos empleado en este estudio, titulado \textit{Top Spotify Songs in 73 Countries (Daily Updated)} y publicado por el usuario Asaniczka en la plataforma Kaggle \cite{asaniczka2025}, fue integrado mediante un proceso automatizado. Se implementó una rutina en Python que verifica la existencia de una copia local del archivo; en caso de no estar disponible, se procede a su descarga a través de la API oficial de Kaggle empleando la librería \texttt{kagglehub}.
 
-[SUGERENCIA: Podemos explicar: (a) cómo descargamos o accedimos a los datos, (b) qué tamaño y dimensionalidad tiene (confirmando >100MB), (c) qué tipo de variables encontramos, (d) si hay desbalanceo de clases, valores faltantes, etc. (primer vistazo).]
+El archivo original posee un tamaño de 474 megabytes y se encuentra en formato CSV. La carga en memoria se realizó mediante la función \texttt{read\_csv} de la librería \texttt{pandas}. El conjunto de datos está compuesto por 2.110.316 registros y 25 atributos. Entre los atributos disponibles se encuentran identificadores (\texttt{spotify\_id}, \texttt{name}, \texttt{artists}), variables temporales (\texttt{snapshot\_date}), métricas de popularidad (\texttt{popularity}, \texttt{is\_explicit}) y propiedades acústicas como \texttt{danceability}, \texttt{energy}, \texttt{valence}, \texttt{tempo} y \texttt{loudness}, entre otras.
 
+Esta caracterización inicial constituye la base para las fases subsiguientes de selección de variables y preprocesamiento.
+
+% ========== subsection/02 ==========
 \subsection{Preprocesamiento y curación de datos}
 
-[SUGERENCIA: Acá podemos detallar las decisiones de limpieza que consideramos o aplicamos. Posibles pasos a mencionar:]
+El preprocesamiento se inició con la selección de las variables relevantes para el análisis. Se eligieron once atributos acústicos que describen las propiedades musicales de cada canción: \texttt{danceability}, \texttt{energy}, \texttt{valence}, \texttt{acousticness}, \texttt{instrumentalness}, \texttt{liveness}, \texttt{speechiness}, \texttt{tempo}, \texttt{loudness}, \texttt{duration\_ms} y \texttt{mode}. La variable \texttt{is\_explicit} se reservó para un análisis posterior sobre la distribución del contenido explícito entre los clusters.
+
+A continuación, se aplicaron las siguientes operaciones de limpieza:
+
 \begin{itemize}
-    \item Manejo de valores nulos (¿los eliminamos? ¿los imputamos con media/mediana/moda? ¿con algún modelo?)
-    \item Detección y tratamiento de outliers (¿usamos IQR? ¿z-score? ¿los eliminamos? ¿los transformamos?)
-    % \item Transformaciones (¿logarítmicas? ¿estandarización? ¿normalización?)
-    \item Codificación de variables categóricas (¿one-hot encoding? ¿label encoding? ¿target encoding?)
-    \item Reducción de dimensionalidad si es necesario (¿PCA? ¿selección de features?)
-    \item División en train/test/validation (por ejemplo, 70/20/10 o 80/20)
+    \item \textbf{Valores nulos:} No se detectaron valores ausentes en las once variables seleccionadas.
+    \item \textbf{Duplicados:} No se encontraron filas completamente duplicadas en el conjunto de datos.
+    \item \textbf{Valores inválidos:} Se eliminaron 30 registros que presentaban valores anómalos: aquellos con \texttt{tempo} igual a cero, \texttt{duration\_ms} no positivo, \texttt{mode} diferente de 0 o 1, o valores fuera del rango [0,1] en las variables de proporción.
 \end{itemize}
 
-\subsection{Modelado descriptivo}
+Para mitigar el efecto de la alta asimetría en la distribución de tres variables (\texttt{instrumentalness}, \texttt{speechiness} y \texttt{liveness}), se aplicó una transformación logarítmica de la forma $\log(x+1)$. Esta transformación reduce el impacto de valores extremos y aproxima la distribución a una forma más cercana a la normal.
 
-[SUGERENCIA: Acá podemos explicar qué métodos usamos para describir y entender los datos. Ejemplos:]
-\begin{itemize}
-    \item Estadísticos descriptivos (media, mediana, desviación, cuartiles)
-    \item Matrices de correlación (Pearson, Spearman)
-    \item Visualizaciones (histogramas, boxplots, scatter plots, mapas de calor)
-    \item Análisis de componentes principales (si aplica)
-\end{itemize}
+Debido a las limitaciones de memoria RAM del entorno de trabajo, se optó por trabajar con una muestra aleatoria estratificada del 20\% del conjunto de datos limpio, lo que resultó en aproximadamente 420.000 registros. Esta muestra conserva las propiedades estadísticas del conjunto original y permite la ejecución eficiente de los algoritmos de clustering.
 
-\subsection{Modelado predictivo}
+Finalmente, antes de aplicar los algoritmos de clustering, todas las variables fueron estandarizadas utilizando \texttt{StandardScaler} de la librería \texttt{scikit-learn}. Este proceso transforma cada variable para que tenga media cero y desviación estándar uno, evitando que las diferencias de escala influyan en el cálculo de distancias entre puntos.
 
-[SUGERENCIA: Esta es la parte clave. Podemos explicar: (a) qué algoritmos probamos o planeamos probar, (b) qué hiperparámetros consideramos, (c) qué métrica de evaluación usamos (accuracy, precision, recall, F1, AUC-ROC, MSE, MAE, según si es clasificación o regresión), (d) qué técnica de validación usamos (validación cruzada k-fold, hold-out, etc.). También podemos mencionar si hacemos búsqueda de hiperparámetros (GridSearch, RandomSearch).]
+% ========== subsection/03 ==========
+\subsection{Análisis exploratorio de datos}
+
+Se realizó un análisis exploratorio para comprender la estructura y las relaciones entre las once variables acústicas seleccionadas.
+
+\subsubsection{Estadísticos descriptivos}
+
+La Tabla \ref{tab:estadisticos} presenta los estadísticos principales de cada variable. Los resultados muestran escalas muy diferentes entre variables, lo que confirma la necesidad de estandarización previa al clustering.
+
+\begin{table}[htbp]
+\caption{Estadísticos descriptivos de las variables acústicas}
+\centering
+\small
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Variable} & \textbf{Media} & \textbf{Mediana} & \textbf{Rango} \\
+\hline
+danceability & 0.676 & 0.700 & [0.066, 0.988] \\
+energy & 0.649 & 0.668 & [0.000, 0.998] \\
+valence & 0.546 & 0.548 & [0.000, 0.992] \\
+acousticness & 0.275 & 0.191 & [0.000, 0.996] \\
+instrumentalness & 0.019 & 0.000 & [0.000, 0.691] \\
+liveness & 0.153 & 0.115 & [0.014, 0.685] \\
+speechiness & 0.088 & 0.057 & [0.022, 0.671] \\
+tempo (BPM) & 122.101 & 119.965 & [36.6, 236.1] \\
+loudness (dB) & -6.773 & -6.064 & [-54.3, 3.2] \\
+duration (ms) & 194312 & 186191 & [16320, 1.296M] \\
+mode & 0.537 & 1.000 & [0, 1] \\
+\hline
+\end{tabular}
+\label{tab:estadisticos}
+\end{table}
+
+\subsubsection{Análisis de correlaciones y asimetría}
+
+Se generó una matriz de correlación de Pearson. La correlación más relevante fue entre \texttt{energy} y \texttt{loudness} (0.653). No se identificaron correlaciones superiores a 0.7, por lo que no fue necesario eliminar variables por redundancia.
+
+El análisis de asimetría reveló que \texttt{instrumentalness} (5.79), \texttt{speechiness} (1.96), \texttt{liveness} (1.91), \texttt{loudness} (-4.46) y \texttt{duration\_ms} (1.85) presentan alta asimetría, lo que justifica la transformación logarítmica aplicada en el preprocesamiento.
+
+\subsubsection{Análisis de modo}
+
+El 53.6\% de las canciones están en modo mayor y el 46.4\% en modo menor. Esta distribución se utilizará para caracterizar los clusters encontrados.
+
+% ========== subsection/04 ==========
+\subsection{Modelado predictivo (clustering no supervisado)}
+
+\subsubsection{K-Means}
+
+[Implementamos K-Means con scikit-learn. Evaluamos valores de K entre 2 y 10 usando el método del codo (inercia) y el coeficiente de Silhouette. Seleccionamos el K óptimo. Configuramos n\_init=10 y random\_state=42 para reproducibilidad.]
+
+\subsubsection{DBSCAN}
+
+[Implementamos DBSCAN con búsqueda de hiperparámetros: eps en el rango 0.3 a 1.0 y min\_amples fijo en 10. Evaluamos la calidad con Silhouette y registramos el porcentaje de puntos etiquetados como ruido.]
+
+\subsubsection{Agglomerative Clustering}
+
+[Implementamos AgglomerativeClustering con enlace ward y el mismo número de clusters que el K óptimo de K-Means, para facilitar la comparación.]
+
+\subsubsection{Evaluación de los clusters}
+
+[Calculamos el coeficiente de Silhouette para cada algoritmo. Comparamos los resultados en términos de calidad de agrupamiento y facilidad de interpretación para el negocio musical.]
+
+% ========== subsection/05 ==========
+\subsection{Interpretación de los clusters}
+
+[Obtenemos los centroides de K-Means (o valores promedio por cluster) para caracterizar cada grupo. Asignamos nombres descriptivos a cada cluster basándonos en los valores de danceability, energy y valence. Calculamos la distribución de contenido explícito (is\_explicit) dentro de cada cluster. Finalmente, formulamos recetas acústicas que resuman el perfil de cada grupo musical.]
