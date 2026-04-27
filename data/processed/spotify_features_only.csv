@@ -1,0 +1,2 @@
+danceability,energy,valence,acousticness,instrumentalness,liveness,speechiness,tempo,loudness,duration_ms,mode
+0.368,0.694,0.391,0.704,6.59e-06,0.055,0.06,168.115,-6.141,186964,1

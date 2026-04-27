@@ -1,0 +1,14 @@
+.venv
+
+## LaTeX - Archivos temporales
+*.aux
+*.fdb_latexmk
+*.fls
+*.gz
+*.log
+*.out
+*.toc
+*.pdf
+*.synctex.gz
+*.blg
+*.bbl
