@@ -11,7 +11,7 @@ El presente proyecto se enfoca en el análisis de las canciones que han logrado 
 
 \subsection{Dataset seleccionado}
 
-El dataset utilizado en este proyecto se denomina \textit{Top Spotify Songs in 73 Countries (Daily Updated)}, obtenido de la plataforma Kaggle. Corresponde a un registro histórico diario de las canciones que han aparecido en las listas Top 50 de Spotify en 72 países, incluyendo también una lista global. Los datos fueron recopilados a través de la API oficial de Spotify.
+El dataset utilizado en este proyecto se denomina \textit{Top Spotify Songs in 73 Countries (Daily Updated)} \cite{asaniczka2025}, obtenido de la plataforma Kaggle.
 
 Las características principales del dataset son las siguientes:
 
@@ -50,28 +50,3 @@ A continuación, se detallan explícitamente las diferencias entre el presente t
 \textbf{Quinta diferencia: análisis específico del contenido explícito.} Ninguno de los cuadernos revisados dedica una pregunta de investigación al análisis de la variable \textit{is\_explicit}. El presente trabajo incluye una pregunta específica para determinar si las canciones con contenido explícito tienden a concentrarse en algún cluster particular.
 
 \textbf{Sexta diferencia: recomendaciones accionables como resultado.} Los trabajos existentes se limitan a presentar los clusters encontrados sin traducirlos en recomendaciones prácticas. El presente proyecto entrega como resultado final una receta acústica para cada perfil musical, especificando qué combinación de valores de \textit{danceability}, \textit{energy} y \textit{valence} caracteriza a cada tipo de canción exitosa.
-
-\noindent A modo de resumen, la Tabla \ref{tab:diferenciacion} presenta una comparación sintética entre los enfoques identificados en trabajos existentes y el propuesto en este proyecto.
-
-\begin{table}[htbp]
-\caption{Comparación entre trabajos existentes y el presente proyecto}
-\centering
-\begin{tabular}{|l|c|c|}
-\hline
-\textbf{Aspecto} & \textbf{Trabajos existentes en Kaggle} & \textbf{Trabajo presentado} \\
-\hline
-Tipo de problema & Regresión o análisis exploratorio & Clustering no supervisado \\
-\hline
-Algoritmos utilizados & Generalmente solo K-Means & K-Means, DBSCAN y Agglomerative \\
-\hline
-Nomenclatura de clusters & Etiquetas numéricas & Nombres descriptivos \\
-\hline
-Variables acústicas utilizadas & 9 variables estándar & 11 variables \\
-\hline
-Análisis de \textit{is\_explicit} & Generalmente no incluido & Pregunta específica \\
-\hline
-Tipo de resultado & Descripción de clusters & Recomendaciones accionables \\
-\hline
-\end{tabular}
-\label{tab:diferenciacion}
-\end{table}
