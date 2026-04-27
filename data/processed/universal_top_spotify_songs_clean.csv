@@ -1,2 +1,2 @@
 spotify_id,name,artists,daily_rank,daily_movement,weekly_movement,country,snapshot_date,popularity,is_explicit,duration_ms,album_name,album_release_date,danceability,energy,key,loudness,mode,speechiness,acousticness,instrumentalness,liveness,valence,tempo,time_signature
-2RkZ5LkEzeHGRsmDqKwmaJ,Ordinary,Alex Warren,1,1,0,,2025-06-11,95,False,186964,"You'll Be Alright, Kid (Chapter 1)",2024-09-26,0.368,0.694,2,-6.141,1,0.06,0.704,6.59e-06,0.055,0.391,168.115,3
+2RkZ5LkEzeHGRsmDqKwmaJ,Ordinary,Alex Warren,1,1,0,,2025-06-11,95,False,186964,"You'll Be Alright, Kid (Chapter 1)",2024-09-26,0.368,0.694,2,-6.141,1,0.05826890812397577,0.704,6.589978286045396e-06,0.05354076692802982,0.391,168.115,3
