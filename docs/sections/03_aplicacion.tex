@@ -1,0 +1,77 @@
+% ========== sections/03_aplicacion.tex ==========
+\section{Área de Aplicación}
+
+\subsection{Contexto del dominio}
+
+La industria del streaming musical ha experimentado un crecimiento exponencial en la última década. Plataformas como Spotify, Apple Music y Amazon Music han transformado la forma en que los consumidores acceden a la música, pasando de la compra física o digital por unidad al modelo de suscripción con acceso ilimitado. Actualmente, Spotify cuenta con cientos de millones de usuarios activos mensuales y alberga más de 100 millones de canciones en su catálogo.
+
+En este ecosistema, la capacidad de recomendar música de manera personalizada se ha convertido en una ventaja competitiva clave. Las listas de reproducción generadas algorítmicamente, como Discover Weekly o las listas Top 50 de cada país, constituyen el principal punto de contacto entre la plataforma y el usuario. Detrás de estas recomendaciones existen modelos de aprendizaje automático que analizan las características acústicas de las canciones y los patrones de escucha de los usuarios.
+
+El presente proyecto se enfoca en el análisis de las canciones que han logrado posicionarse en las listas Top 50 de Spotify a nivel global. Comprender qué perfiles acústicos predominan entre los grandes éxitos tiene implicaciones directas para diversos actores de la industria. Para las plataformas de streaming, permite optimizar sus algoritmos de recomendación y curación de listas. Para las discográficas, ayuda a identificar qué tipo de canciones tienen mayor probabilidad de éxito, orientando así sus decisiones de inversión y marketing. Para los artistas y productores independientes, ofrece una guía sobre qué características musicales potenciar en sus próximos lanzamientos.
+
+\subsection{Dataset seleccionado}
+
+El dataset utilizado en este proyecto se denomina \textit{Top Spotify Songs in 73 Countries (Daily Updated)}, obtenido de la plataforma Kaggle. Corresponde a un registro histórico diario de las canciones que han aparecido en las listas Top 50 de Spotify en 72 países, incluyendo también una lista global. Los datos fueron recopilados a través de la API oficial de Spotify.
+
+Las características principales del dataset son las siguientes:
+
+\begin{itemize}
+    \item Tamaño aproximado en memoria: 1.17 gigabytes
+    \item Número de registros: 2,110,316 canciones
+    \item Número de columnas: 25
+    \item Formato: Archivo CSV
+\end{itemize}
+
+El dataset contiene los siguientes tipos de variables:
+
+\begin{itemize}
+    \item \textbf{Variables identificadoras:} \textit{spotify\_id}, \textit{name}, \textit{artists}, \textit{album\_name}
+    \item \textbf{Variables temporales:} \textit{snapshot\_date}, \textit{album\_release\_date}
+    \item \textbf{Variables de ranking:} \textit{daily\_rank}, \textit{daily\_movement}, \textit{weekly\_movement}
+    \item \textbf{Variables geográficas:} \textit{country}
+    \item \textbf{Variables de popularidad:} \textit{popularity}, \textit{is\_explicit}
+    \item \textbf{Variables acústicas:} \textit{danceability}, \textit{energy}, \textit{key}, \textit{loudness}, \textit{mode}, \textit{speechiness}, \textit{acousticness}, \textit{instrumentalness}, \textit{liveness}, \textit{valence}, \textit{tempo}, \textit{time\_signature}, \textit{duration\_ms}
+\end{itemize}
+
+Para el presente proyecto, se seleccionaron once variables acústicas: \textit{danceability}, \textit{energy}, \textit{valence}, \textit{acousticness}, \textit{instrumentalness}, \textit{liveness}, \textit{speechiness}, \textit{tempo}, \textit{loudness}, \textit{duration\_ms} y \textit{mode}. Se excluyeron las variables identificadoras, temporales, geográficas, de ranking y la variable \textit{key} por considerar que no aportan a la segmentación por propiedades acústicas. La variable \textit{is\_explicit} se conserva únicamente para el análisis posterior de contenido explícito.
+
+\subsection{Aporte alternativo (diferenciación)}
+
+A continuación, se detallan explícitamente las diferencias entre el presente trabajo y los análisis públicos existentes sobre este mismo dataset en plataformas como Kaggle. Esta diferenciación es fundamental para garantizar la originalidad del proyecto y evitar cualquier acusación de plagio.
+
+\textbf{Primera diferencia: enfoque del problema.} La mayoría de los cuadernos disponibles en Kaggle se centran en tareas de regresión para predecir el valor de popularidad de una canción, o en análisis exploratorio de tendencias temporales y geográficas. Por el contrario, el presente trabajo aborda un problema de clustering no supervisado, buscando descubrir perfiles acústicos latentes en lugar de predecir una variable objetivo.
+
+\textbf{Segunda diferencia: comparación de múltiples algoritmos.} Mientras que los trabajos que aplican clustering a este dataset utilizan únicamente el algoritmo K-Means, el presente proyecto implementa y compara tres algoritmos distintos: K-Means (basado en centroides), DBSCAN (basado en densidad) y Agglomerative Clustering (jerárquico). Esta triple comparación no ha sido identificada en los cuadernos públicos revisados.
+
+\textbf{Tercera diferencia: nomenclatura interpretable de los clusters.} Los análisis existentes que aplican clustering reportan sus resultados mediante etiquetas numéricas como Cluster 0 o Cluster 1, sin ninguna interpretación semántica. El presente trabajo asigna nombres descriptivos a cada cluster basados en sus valores promedio de \textit{danceability}, \textit{energy} y \textit{valence}, facilitando la comunicación de resultados a audiencias no técnicas.
+
+\textbf{Cuarta diferencia: inclusión de variables adicionales.} La mayoría de los análisis de clustering sobre este dataset se limitan a las nueve variables acústicas estándar proporcionadas por la API de Spotify. El presente trabajo incorpora \textit{duration\_ms} y \textit{mode}, totalizando once características para una segmentación más completa del perfil musical de cada canción.
+
+\textbf{Quinta diferencia: análisis específico del contenido explícito.} Ninguno de los cuadernos revisados dedica una pregunta de investigación al análisis de la variable \textit{is\_explicit}. El presente trabajo incluye una pregunta específica para determinar si las canciones con contenido explícito tienden a concentrarse en algún cluster particular.
+
+\textbf{Sexta diferencia: recomendaciones accionables como resultado.} Los trabajos existentes se limitan a presentar los clusters encontrados sin traducirlos en recomendaciones prácticas. El presente proyecto entrega como resultado final una receta acústica para cada perfil musical, especificando qué combinación de valores de \textit{danceability}, \textit{energy} y \textit{valence} caracteriza a cada tipo de canción exitosa.
+
+\noindent A modo de resumen, la Tabla \ref{tab:diferenciacion} presenta una comparación sintética entre los enfoques identificados en trabajos existentes y el propuesto en este proyecto.
+
+\begin{table}[htbp]
+\caption{Comparación entre trabajos existentes y el presente proyecto}
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Aspecto} & \textbf{Trabajos existentes en Kaggle} & \textbf{Trabajo presentado} \\
+\hline
+Tipo de problema & Regresión o análisis exploratorio & Clustering no supervisado \\
+\hline
+Algoritmos utilizados & Generalmente solo K-Means & K-Means, DBSCAN y Agglomerative \\
+\hline
+Nomenclatura de clusters & Etiquetas numéricas & Nombres descriptivos \\
+\hline
+Variables acústicas utilizadas & 9 variables estándar & 11 variables \\
+\hline
+Análisis de \textit{is\_explicit} & Generalmente no incluido & Pregunta específica \\
+\hline
+Tipo de resultado & Descripción de clusters & Recomendaciones accionables \\
+\hline
+\end{tabular}
+\label{tab:diferenciacion}
+\end{table}

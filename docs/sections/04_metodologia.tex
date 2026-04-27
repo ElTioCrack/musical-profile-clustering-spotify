@@ -1,0 +1,34 @@
+% ========== sections/04_metodologia.tex ==========
+\section{Metodología}
+
+[INDICACIÓN: Según la diapositiva, esta sección debe detallar el procedimiento de investigación. Podemos estructurarla siguiendo el ciclo de vida de Ciencia de Datos.]
+
+\subsection{Adquisición y caracterización del dataset}
+
+[SUGERENCIA: Podemos explicar: (a) cómo descargamos o accedimos a los datos, (b) qué tamaño y dimensionalidad tiene (confirmando >100MB), (c) qué tipo de variables encontramos, (d) si hay desbalanceo de clases, valores faltantes, etc. (primer vistazo).]
+
+\subsection{Preprocesamiento y curación de datos}
+
+[SUGERENCIA: Acá podemos detallar las decisiones de limpieza que consideramos o aplicamos. Posibles pasos a mencionar:]
+\begin{itemize}
+    \item Manejo de valores nulos (¿los eliminamos? ¿los imputamos con media/mediana/moda? ¿con algún modelo?)
+    \item Detección y tratamiento de outliers (¿usamos IQR? ¿z-score? ¿los eliminamos? ¿los transformamos?)
+    % \item Transformaciones (¿logarítmicas? ¿estandarización? ¿normalización?)
+    \item Codificación de variables categóricas (¿one-hot encoding? ¿label encoding? ¿target encoding?)
+    \item Reducción de dimensionalidad si es necesario (¿PCA? ¿selección de features?)
+    \item División en train/test/validation (por ejemplo, 70/20/10 o 80/20)
+\end{itemize}
+
+\subsection{Modelado descriptivo}
+
+[SUGERENCIA: Acá podemos explicar qué métodos usamos para describir y entender los datos. Ejemplos:]
+\begin{itemize}
+    \item Estadísticos descriptivos (media, mediana, desviación, cuartiles)
+    \item Matrices de correlación (Pearson, Spearman)
+    \item Visualizaciones (histogramas, boxplots, scatter plots, mapas de calor)
+    \item Análisis de componentes principales (si aplica)
+\end{itemize}
+
+\subsection{Modelado predictivo}
+
+[SUGERENCIA: Esta es la parte clave. Podemos explicar: (a) qué algoritmos probamos o planeamos probar, (b) qué hiperparámetros consideramos, (c) qué métrica de evaluación usamos (accuracy, precision, recall, F1, AUC-ROC, MSE, MAE, según si es clasificación o regresión), (d) qué técnica de validación usamos (validación cruzada k-fold, hold-out, etc.). También podemos mencionar si hacemos búsqueda de hiperparámetros (GridSearch, RandomSearch).]

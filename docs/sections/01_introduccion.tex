@@ -1,0 +1,36 @@
+% ========== sections/01_introduccion.tex ==========
+\section{Introducción}
+
+\subsection{Problema que abordamos}
+
+En la industria del streaming musical, plataformas como Spotify generan diariamente millones de datos sobre las preferencias de los oyentes. Sin embargo, para una discográfica o un artista independiente, la pregunta clave no es únicamente qué canción es popular, sino qué perfiles musicales tienden a repetirse entre los grandes éxitos. ¿Predominan las canciones con alta capacidad de baile sobre las baladas de baja energía? ¿Las canciones con contenido explícito conforman un grupo propio? ¿Existe una combinación de características acústicas que incremente las probabilidades de alcanzar el Top 50?
+
+El presente proyecto se posiciona desde la perspectiva de un actor de la industria musical y busca responder estas interrogantes mediante técnicas de clustering no supervisado. Se utiliza un dataset de 2.1 millones de registros que contiene las canciones que han aparecido en las listas Top 50 de Spotify a nivel global. El objetivo final es construir un mapa de personalidades musicales que sirva como herramienta de apoyo para la curación de listas de reproducción, la selección de nuevos artistas o la planificación de lanzamientos discográficos.
+
+\subsection{Preguntas de investigación}
+
+A partir del problema planteado, este trabajo busca responder las siguientes preguntas de investigación:
+
+\begin{enumerate}
+    \item ¿Cuántos grupos naturales de canciones existen en el Top 50 mundial de Spotify?
+    
+    \item ¿Qué algoritmo de clustering, entre K-Means, DBSCAN y Agglomerative Clustering, produce los mejores resultados en términos de coeficiente de Silhouette y facilidad de interpretación para un negocio musical?
+    
+    \item ¿Es posible asignar nombres descriptivos a los clusters encontrados basándose en sus valores promedio de \textit{danceability}, \textit{energy} y \textit{valence}?
+    
+    \item ¿Las canciones con contenido explícito tienden a concentrarse en algún cluster específico o se distribuyen uniformemente entre todos los perfiles musicales?
+    
+    \item ¿Qué combinación de valores de \textit{danceability}, \textit{energy} y \textit{valence} caracteriza a cada perfil musical, de modo que pueda ofrecerse como una receta acústica para artistas o discográficas?
+\end{enumerate}
+
+\subsection{Pertinencia e interés para el curso}
+
+El presente proyecto se alinea directamente con los objetivos del módulo de Data Analytics por las siguientes razones:
+
+En primer lugar, se trabaja con un dataset de alta dimensionalidad de aproximadamente 1.17 gigabytes en memoria que contiene 2.1 millones de registros y 25 columnas, cumpliendo ampliamente el requisito de tamaño superior a 100 megabytes establecido por el docente.
+
+En segundo lugar, se implementan y comparan tres algoritmos de clustering no supervisado: K-Means, DBSCAN y Agglomerative Clustering, tal como se solicita en la consigna que pide comparar al menos dos algoritmos diferentes.
+
+En tercer lugar, el proyecto documenta todas las fases del ciclo de vida de un proyecto de datos, incluyendo adquisición, preprocesamiento, limpieza, transformación mediante escalado, modelado, evaluación con métricas objetivas como el coeficiente de Silhouette, y visualización de resultados.
+
+Finalmente, los resultados obtenidos tienen implicaciones prácticas para la industria musical, demostrando la utilidad del análisis de datos en un sector concreto.
