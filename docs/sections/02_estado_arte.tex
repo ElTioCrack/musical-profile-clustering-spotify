@@ -1,16 +1,53 @@
 % ========== sections/02_estado_arte.tex ==========
 \section{Estado del Arte}
 
-[INDICACIÓN: Según la diapositiva, esta sección debe contener los referentes teóricos y técnicos que sustentan nuestro trabajo. Podemos estructurarla así:]
+El presente estado del arte reúne los referentes teóricos y técnicos que sustentan el proyecto de clustering de perfiles musicales sobre el \textit{Top 50 mundial} de Spotify. Se organiza en tres ejes: las herramientas y librerías utilizadas, los algoritmos de clustering considerados, y las metodologías de trabajo adoptadas.
 
+% --------------------------------------------------
 \subsection{Referentes técnicos (herramientas y librerías)}
 
-[SUGERENCIA: Podemos describir las herramientas que planeamos usar o que hemos usado. Posibilidades: Python vs R (¿cuál elegimos y por qué?). Librerías como Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn, TensorFlow, etc. También podemos mencionar entornos como Jupyter Notebook o Google Colab.]
+El ecosistema de Python constituye el estándar de facto en proyectos de Ciencia de Datos debido a su amplia comunidad, su legibilidad y la madurez de sus librerías especializadas \cite{vanderplas2016python}. Frente a alternativas como R —orientada principalmente al análisis estadístico y la visualización académica— Python ofrece mayor flexibilidad para integrar preprocesamiento, modelado y visualización dentro de un mismo flujo de trabajo, razón por la cual fue seleccionado como lenguaje principal del proyecto.
 
+Las librerías empleadas se agrupan en tres categorías:
+
+\begin{itemize}
+    \item \textbf{Manipulación y análisis de datos:} \texttt{Pandas} \cite{mckinney2010data} para la carga, limpieza y transformación del dataset de Spotify; \texttt{NumPy} \cite{harris2020array} para operaciones vectoriales y cálculo numérico eficiente.
+    \item \textbf{Modelado y evaluación:} \texttt{Scikit-learn} \cite{pedregosa2011scikit} provee implementaciones de K-Means, DBSCAN y Agglomerative Clustering, así como métricas de evaluación como el coeficiente de Silhouette y el índice de Davies-Bouldin.
+    \item \textbf{Visualización:} \texttt{Matplotlib} \cite{hunter2007matplotlib} y \texttt{Seaborn} \cite{waskom2021seaborn} se utilizan para generar histogramas, boxplots, mapas de calor de correlación y diagramas de dispersión que facilitan la interpretación de los clusters.
+\end{itemize}
+
+El entorno de desarrollo elegido es \textbf{Google Colab}, que permite la ejecución de notebooks de Jupyter en la nube sin configuración local, facilitando la colaboración entre los integrantes del equipo y el acceso gratuito a recursos de cómputo.
+
+% --------------------------------------------------
 \subsection{Referentes algorítmicos (métodos y modelos)}
 
-[SUGERENCIA: Acá podemos explicar los algoritmos que consideramos para las fases descriptiva y predictiva. Para descriptiva: estadísticos básicos, matrices de correlación, análisis de frecuencias, visualizaciones (histogramas, boxplots, scatter plots). Para predictiva: opciones como regresión lineal/logística, árboles de decisión, random forest, SVM, k-NN, o incluso redes neuronales si el dataset lo permite. Podemos justificar por qué ciertos algoritmos son más adecuados para nuestro problema (tamaño de datos, tipo de variable objetivo, necesidad de interpretabilidad, etc.).]
+\subsubsection{Análisis exploratorio y descriptivo}
 
+Antes de aplicar cualquier algoritmo de clustering, se realizará un análisis exploratorio de datos (EDA) que incluye estadísticos descriptivos básicos (media, mediana, desviación estándar), matrices de correlación de Pearson para detectar colinealidad entre variables acústicas, y visualizaciones como histogramas de distribución por variable e histogramas de frecuencia acumulada.
+
+\subsubsection{Preprocesamiento}
+
+Dado que los algoritmos de clustering son sensibles a la escala de las variables \cite{han2011data}, se aplicará estandarización mediante \texttt{StandardScaler} de Scikit-learn, transformando cada variable acústica a media cero y desviación estándar unitaria. Las columnas \texttt{popularity}, \texttt{key} y \texttt{time\_signature} serán excluidas de los features de clustering por las razones expuestas en la sección de metodología; \texttt{is\_explicit} se reserva como variable de análisis post-clustering.
+
+\subsubsection{Algoritmos de clustering}
+
+Se evalúan tres algoritmos de clustering no supervisado:
+
+\begin{enumerate}
+    \item \textbf{K-Means} \cite{macqueen1967some}: algoritmo de particionamiento que minimiza la inercia intra-cluster. Su principal ventaja es la eficiencia computacional sobre grandes volúmenes de datos; su limitación es la suposición de clusters convexos de tamaño similar. Para determinar el número óptimo de clusters $k$ se utilizarán el método del codo (\textit{Elbow Method}) y el análisis de Silhouette.
+    \item \textbf{DBSCAN} (\textit{Density-Based Spatial Clustering of Applications with Noise}) \cite{ester1996density}: agrupa puntos por densidad de vecindad, definida por los parámetros $\varepsilon$ (radio de búsqueda) y \texttt{min\_samples}. Su fortaleza reside en la capacidad de detectar clusters de forma arbitraria y de identificar outliers, lo que es relevante para descubrir canciones atípicas que no encajan en ningún perfil musical.
+    \item \textbf{Agglomerative Clustering} \cite{murtagh2012algorithms}: método jerárquico aglomerativo que fusiona iterativamente los pares de clusters más cercanos según un criterio de enlace (\textit{linkage}). Produce un dendrograma que permite visualizar la estructura jerárquica de los perfiles musicales y seleccionar el número de grupos de forma interpretable.
+\end{enumerate}
+
+\subsubsection{Métricas de evaluación}
+
+La comparación entre algoritmos se realizará mediante el \textbf{coeficiente de Silhouette} \cite{rousseeuw1987silhouettes}, que mide la cohesión intra-cluster y la separación inter-cluster en un rango de $[-1, 1]$, donde valores cercanos a 1 indican clusters bien definidos. Como métrica complementaria se empleará el \textbf{índice de Davies-Bouldin} \cite{davies1979cluster}, donde valores menores reflejan mejor separación.
+
+% --------------------------------------------------
 \subsection{Referentes procesuales (metodologías de trabajo)}
 
-[SUGERENCIA: Podemos mencionar marcos de trabajo como CRISP-DM, SEMMA, o el flujo estándar de Ciencia de Datos (adquisición, preprocesamiento, modelado, evaluación, despliegue). La diapositiva del docente menciona: "introducción, estado del arte, área de aplicación, metodología, resultados y conclusiones".]
+El proyecto sigue el marco de trabajo \textbf{CRISP-DM} (\textit{Cross-Industry Standard Process for Data Mining}) \cite{wirth2000crisp}, ampliamente adoptado en proyectos de minería de datos y analítica de negocios. Sus fases —comprensión del negocio, comprensión de los datos, preparación de los datos, modelado, evaluación y despliegue— se alinean directamente con la estructura del presente informe: introducción, estado del arte, área de aplicación, metodología, resultados y conclusiones.
+
+En el contexto específico del análisis musical, trabajos previos como el de Schedl et al. \cite{schedl2018current} han demostrado que las características acústicas de audio (incluidas las proporcionadas por la API de Spotify) son predictores significativos del comportamiento de los oyentes y la popularidad de las canciones. Del mismo modo, estudios como el de Kim et al. \cite{kim2020music} han aplicado técnicas de clustering sobre datos de plataformas de streaming para descubrir taxonomías de géneros musicales emergentes, validando la pertinencia del enfoque no supervisado para este tipo de datos.
+
+Finalmente, el flujo de trabajo del equipo sigue prácticas de \textbf{reproducibilidad}: el código se versiona en un repositorio de GitHub, los notebooks documentan cada decisión de preprocesamiento y modelado, y los resultados se presentan acompañados de sus métricas de evaluación para garantizar la transparencia del proceso analítico.
