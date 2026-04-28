@@ -12,7 +12,7 @@ Las librerías empleadas se agrupan en tres categorías:
 
 \begin{itemize}
     \item \textbf{Manipulación y análisis de datos:} \texttt{Pandas} \cite{mckinney2010data} para la carga, limpieza y transformación del dataset de Spotify; \texttt{NumPy} \cite{harris2020array} para operaciones vectoriales y cálculo numérico eficiente, incluyendo la transformación logarítmica \texttt{np.log1p()} aplicada durante el preprocesamiento.
-    \item \textbf{Modelado y evaluación:} \texttt{Scikit-learn} \cite{pedregosa2011scikit} provee las implementaciones de K-Means, DBSCAN y Agglomerative Clustering, la clase \texttt{StandardScaler} para el escalado de variables, y métricas de evaluación como el coeficiente de Silhouette y el índice de Davies-Bouldin. El objeto \texttt{StandardScaler} entrenado se serializa mediante \texttt{joblib} para permitir su reutilización sobre nuevos datos.
+    \item \textbf{Modelado y evaluación:} \texttt{Scikit-learn} \cite{pedregosa2011scikit} provee las implementaciones de K-Means y DBSCAN, la clase \texttt{StandardScaler} para el escalado de variables, y métricas de evaluación como el coeficiente de Silhouette y el índice de Davies-Bouldin. El objeto \texttt{StandardScaler} entrenado se serializa mediante \texttt{joblib} para permitir su reutilización sobre nuevos datos.
     \item \textbf{Visualización:} \texttt{Matplotlib} \cite{hunter2007matplotlib} y \texttt{Seaborn} \cite{waskom2021seaborn} se utilizan para generar histogramas, boxplots, mapas de calor de correlación y diagramas de dispersión que facilitan la interpretación de los clusters resultantes.
 \end{itemize}
 
@@ -27,7 +27,7 @@ El análisis exploratorio de datos (EDA) es una fase previa indispensable antes 
 
 \subsubsection{Preprocesamiento y curación de datos}
 
-Una correcta selección y limpieza de variables es determinante para la calidad del clustering \cite{han2011data}. En datasets de características acústicas como el de Spotify, es habitual excluir variables que miden popularidad o contexto (como \texttt{popularity} o \texttt{key}) en favor de aquellas que describen propiedades sonoras intrínsecas. Asimismo, variables con distribuciones fuertemente asimétricas ---como aquellas que miden presencia vocal o instrumental--- suelen requerir una transformación logarítmica de la forma $\log(x+1)$ para reducir el peso de valores extremos sin descartar información \cite{vanderplas2016python}. Por su parte, variables como \texttt{loudness}, cuyos valores en decibelios son inherentemente negativos, no deben filtrarse por rango, ya que sus valores son técnicamente válidos en señales de audio digital.
+Una correcta selección y limpieza de variables es determinante para la calidad del clustering \cite{han2011data}. En proyectos de este tipo, es habitual excluir variables contextuales o de popularidad en favor de aquellas que describen propiedades sonoras intrínsecas. Asimismo, variables con distribuciones fuertemente asimétricas suelen requerir una transformación logarítmica para reducir el peso de valores extremos sin descartar información \cite{vanderplas2016python}.
 
 \subsubsection{Muestreo y escalado}
 
@@ -35,12 +35,11 @@ Cuando el volumen de datos supera los límites de memoria o tiempo de cómputo r
 
 \subsubsection{Algoritmos de clustering}
 
-Se evalúan tres algoritmos de clustering no supervisado:
+Se evalúan dos algoritmos de clustering no supervisado:
 
 \begin{enumerate}
     \item \textbf{K-Means} \cite{macqueen1967some}: algoritmo de particionamiento que minimiza la inercia intra-cluster. Su principal ventaja es la eficiencia computacional sobre grandes volúmenes de datos; su limitación es la suposición de clusters convexos de tamaño similar. Para determinar el número óptimo de clusters $k$ se utilizarán el método del codo (\textit{Elbow Method}) y el análisis de Silhouette.
     \item \textbf{DBSCAN} (\textit{Density-Based Spatial Clustering of Applications with Noise}) \cite{ester1996density}: agrupa puntos por densidad de vecindad, definida por los parámetros $\varepsilon$ (radio de búsqueda) y \texttt{min\_samples}. Su fortaleza reside en la capacidad de detectar clusters de forma arbitraria y de identificar canciones atípicas que no encajan en ningún perfil musical.
-    \item \textbf{Agglomerative Clustering} \cite{murtagh2012algorithms}: método jerárquico aglomerativo que fusiona iterativamente los pares de clusters más cercanos según un criterio de enlace (\textit{linkage}). Produce un dendrograma que permite visualizar la estructura jerárquica de los perfiles musicales y seleccionar el número de grupos de forma interpretable.
 \end{enumerate}
 
 \subsubsection{Métricas de evaluación}
@@ -50,8 +49,8 @@ La comparación entre algoritmos se realizará mediante el \textbf{coeficiente d
 % --------------------------------------------------
 \subsection{Referentes procesuales (metodologías de trabajo)}
 
-El proyecto sigue el marco de trabajo \textbf{CRISP-DM} (\textit{Cross-Industry Standard Process for Data Mining}) \cite{wirth2000crisp}, ampliamente adoptado en proyectos de minería de datos y analítica de negocios \cite{choque2026}. Sus fases ---comprensión del negocio, comprensión de los datos, preparación de los datos, modelado, evaluación y despliegue--- se alinean directamente con la estructura del presente informe: introducción, estado del arte, área de aplicación, metodología, resultados y conclusiones.
+El proyecto sigue el marco de trabajo \textbf{CRISP-DM} (\textit{Cross-Industry Standard Process for Data Mining}) \cite{wirth2000crisp}, ampliamente adoptado en proyectos de minería de datos y analítica de negocios. Sus fases ---comprensión del negocio, comprensión de los datos, preparación de los datos, modelado, evaluación y despliegue--- se alinean directamente con la estructura del presente informe: introducción, estado del arte, metodología, resultados y conclusiones.
 
-En el contexto específico del análisis musical, trabajos previos como el de Schedl et al. \cite{schedl2018current} han demostrado que las características acústicas de audio ---incluidas las proporcionadas por la API de Spotify--- son predictores significativos del comportamiento de los oyentes y la popularidad de las canciones. Del mismo modo, estudios como el de Kim et al. \cite{kim2020music} han aplicado técnicas de clustering sobre datos de plataformas de streaming para descubrir taxonomías de géneros musicales emergentes, validando la pertinencia del enfoque no supervisado para este tipo de datos.
+En el contexto específico del análisis musical, trabajos previos como el de Schedl et al. \cite{schedl2018current} han demostrado que las características acústicas de audio ---incluidas las proporcionadas por la API de Spotify--- son predictores significativos del comportamiento de los oyentes y la popularidad de las canciones. Del mismo modo, estudios como el de Kim et al. \cite{kim2020music} han aplicado técnicas de clustering sobre datos de plataformas de streaming para descubrir taxonomías de géneros musicales, validando la pertinencia del enfoque no supervisado para este tipo de datos.
 
 El flujo de trabajo del equipo sigue prácticas de \textbf{reproducibilidad}: el código se versiona en un repositorio de GitHub, los notebooks documentan cada decisión de preprocesamiento y modelado con sus salidas registradas, y los resultados se presentan acompañados de sus métricas de evaluación para garantizar la transparencia del proceso analítico.
