@@ -23,34 +23,15 @@ El entorno de desarrollo elegido son los \textbf{Jupyter Notebooks} ejecutados t
 
 \subsubsection{Análisis exploratorio y descriptivo}
 
-Antes de aplicar cualquier algoritmo de clustering, se realiza un análisis exploratorio de datos (EDA) que incluye estadísticos descriptivos básicos (media, mediana, desviación estándar), matrices de correlación de Pearson para detectar colinealidad entre variables acústicas, y visualizaciones como histogramas de distribución por variable y diagramas de caja (\textit{boxplots}).
+El análisis exploratorio de datos (EDA) es una fase previa indispensable antes de aplicar cualquier algoritmo de clustering \cite{han2011data}. Permite comprender la distribución de cada variable, detectar colinealidades entre features acústicas mediante matrices de correlación de Pearson, e identificar variables con alta asimetría que requieran transformación antes del modelado. Herramientas como histogramas, diagramas de caja (\textit{boxplots}) y mapas de calor de correlación son fundamentales en esta etapa.
 
 \subsubsection{Preprocesamiento y curación de datos}
 
-El proceso de preprocesamiento, documentado en el cuaderno \texttt{02\_preprocesamiento.ipynb}, opera sobre un dataset de \textbf{2.110.316 registros} con 25 columnas originales, del cual se seleccionan 11 variables acústicas para el clustering: \texttt{danceability}, \texttt{energy}, \texttt{valence}, \texttt{acousticness}, \texttt{instrumentalness}, \texttt{liveness}, \texttt{speechiness}, \texttt{tempo}, \texttt{loudness}, \texttt{duration\_ms} y \texttt{mode}. La variable \texttt{is\_explicit} se reserva como variable de análisis post-clustering, mientras que \texttt{popularity}, \texttt{key} y \texttt{time\_signature} se excluyen por no aportar información sobre las propiedades sonoras de las canciones \cite{han2011data}.
-
-La limpieza de datos se aplica en seis pasos secuenciales:
-
-\begin{enumerate}
-    \item Eliminación de registros con valores nulos en las features acústicas (0 registros afectados).
-    \item Eliminación de filas completamente duplicadas (0 registros afectados).
-    \item Eliminación de registros con \texttt{tempo} $\leq 0$ (1 registro eliminado).
-    \item Eliminación de registros con \texttt{duration\_ms} $\leq 0$ (29 registros adicionales).
-    \item Eliminación de registros con valores de \texttt{mode} distintos de 0 o 1 (0 adicionales).
-    \item Eliminación de registros fuera del rango $[0, 1]$ para las siete variables normalizadas (0 adicionales).
-\end{enumerate}
-
-El resultado es un dataset limpio de \textbf{2.110.286 registros}, con apenas 30 registros eliminados en total (0.001\% del dataset original), lo que evidencia la alta calidad de los datos de la API de Spotify \cite{asaniczka2025}.
-
-Es importante destacar que la variable \texttt{loudness} ---cuyos valores en decibelios se ubican en un rango libre (aproximadamente $-54$ a $+3$ dB)--- \textbf{no} es sometida a filtrado de rango, dado que sus valores negativos son técnicamente válidos y esperados en señales de audio digital.
-
-Para el tratamiento de la asimetría en la distribución de tres variables, se aplica una \textbf{transformación logarítmica} $\log(x+1)$ mediante \texttt{np.log1p()} de NumPy \cite{harris2020array}. Esta transformación ---en lugar de la eliminación de outliers--- reduce la asimetría positiva sin descartar información, y se aplica a \texttt{instrumentalness}, \texttt{speechiness} y \texttt{liveness}, que presentaban colas largas hacia valores altos.
+Una correcta selección y limpieza de variables es determinante para la calidad del clustering \cite{han2011data}. En datasets de características acústicas como el de Spotify, es habitual excluir variables que miden popularidad o contexto (como \texttt{popularity} o \texttt{key}) en favor de aquellas que describen propiedades sonoras intrínsecas. Asimismo, variables con distribuciones fuertemente asimétricas ---como aquellas que miden presencia vocal o instrumental--- suelen requerir una transformación logarítmica de la forma $\log(x+1)$ para reducir el peso de valores extremos sin descartar información \cite{vanderplas2016python}. Por su parte, variables como \texttt{loudness}, cuyos valores en decibelios son inherentemente negativos, no deben filtrarse por rango, ya que sus valores son técnicamente válidos en señales de audio digital.
 
 \subsubsection{Muestreo y escalado}
 
-Dado el tamaño del dataset (más de 2 millones de registros), el cuaderno \texttt{04\_muestreo\_escalado.ipynb} extrae una \textbf{muestra aleatoria estratificada de 100.000 canciones} (aproximadamente el 4.7\% del total, con \texttt{random\_state=42} para reproducibilidad). Esta muestra es suficientemente representativa para los algoritmos de clustering y reduce los tiempos de cómputo a rangos manejables.
-
-Dado que los algoritmos de clustering son sensibles a la escala de las variables \cite{han2011data}, se aplica estandarización mediante \texttt{StandardScaler} de Scikit-learn \cite{pedregosa2011scikit}, transformando cada una de las 11 variables acústicas a media cero y desviación estándar unitaria. El objeto \texttt{StandardScaler} entrenado se serializa en \texttt{scaler.pkl} para su reutilización futura sobre nuevos datos.
+Cuando el volumen de datos supera los límites de memoria o tiempo de cómputo razonables, el muestreo aleatorio es una estrategia ampliamente aceptada en proyectos de minería de datos \cite{han2011data}, siempre que la muestra conserve las propiedades estadísticas del conjunto original. Adicionalmente, dado que los algoritmos de clustering basados en distancias son sensibles a la escala de las variables, la estandarización mediante \texttt{StandardScaler} ---que transforma cada variable a media cero y desviación estándar unitaria--- es un paso previo obligatorio \cite{pedregosa2011scikit}. Serializar el objeto \texttt{StandardScaler} entrenado permite reproducir el mismo escalado sobre nuevos datos en el futuro.
 
 \subsubsection{Algoritmos de clustering}
 
