@@ -18,13 +18,14 @@ Este proyecto implementa un análisis exhaustivo de agrupamiento de perfiles mus
   - Almacena los datos crudos y procesados utilizados en el análisis.
   - `data/raw/`: datos originales sin limpiar.
   - `data/processed/`: datos transformados, muestreados y escalados para el modelado.
-  - Nota: los conjuntos de datos completos no están incluidos aquí porque superan los 100 MB y no se pueden subir a GitHub.
+  - **Nota:** los conjuntos de datos completos no están incluidos aquí porque superan los 100 MB y no se pueden subir a GitHub.
     Para reproducir el proyecto, puede obtener los datos desde:
-    `https://www.kaggle.com/datasets/asaniczka/top-spotify-songs-in-73-countries-daily-updated/data`
+    [Dataset en Kaggle](https://www.kaggle.com/datasets/asaniczka/top-spotify-songs-in-73-countries-daily-updated/data)
 
 - `docs/`
   - Contiene la documentación del proyecto y el informe en formato IEEE.
   - `docs/main.tex`: archivo principal de LaTeX del informe.
+  - `docs/main.pdf`: versión final del informe en formato IEEE.
   - `docs/references.bib`: bibliografía del informe.
   - `docs/figures/`: figuras y gráficos usados en el documento.
   - `docs/sections/`: secciones del informe organizadas por temas.
@@ -59,30 +60,25 @@ El proyecto sigue un flujo estructurado y secuencial que va desde la adquisició
 5. **Modelado con K-Means** (`05_K-Means.ipynb`): Implementación y evaluación del algoritmo K-Means con optimización de hiperparámetros.
 6. **Modelado con DBSCAN** (`06_DBSCAN.ipynb`): Implementación y evaluación del algoritmo DBSCAN con análisis comparativo.
 
-## Descripción de Datos
+## 📌 Enlaces importantes
 
-El proyecto utiliza datos de canciones populares de Spotify. Los datos incluyen características musicales tales como:
-- Características acústicas y de tempo
-- Energía y valencia
-- Danceability (capacidad de baile)
-- Popularidad y métricas de reproducción
+| Recurso | Enlace |
+|---------|--------|
+| **Informe IEEE (PDF)** | [`docs/main.pdf`](https://github.com/ElTioCrack/musical-profile-clustering-spotify/blob/main/docs/main.pdf) |
+| **Presentación del proyecto** | [Canva - Presentación](https://www.canva.com/design/DAHIGgBrhUQ/22gKk63En8oZHxa3BO7ZWw/edit) |
+| **Dataset original** | [Kaggle - Top Spotify Songs](https://www.kaggle.com/datasets/asaniczka/top-spotify-songs-in-73-countries-daily-updated/data) |
+| **Repositorio GitHub** | [musical-profile-clustering-spotify](https://github.com/ElTioCrack/musical-profile-clustering-spotify) |
 
-Nota: Los conjuntos de datos completos no se incluyen en este repositorio debido a limitaciones de tamaño (>100 MB). Para obtener los datos originales, consulte el [dataset de Kaggle](https://www.kaggle.com/datasets/asaniczka/top-spotify-songs-in-73-countries-daily-updated/data).
+---
 
-## Metodología de Clustering
+## 👥 Integrantes del equipo
 
-### K-Means
-Algoritmo de particionamiento que agrupa datos en k clusters minimizando la varianza intracluster. Se implementó con optimización del número óptimo de clusters mediante el método del codo.
+- Felipez, Ilian
+- Mollericona, Miguel
+- Nina, Marcelo
+- Quispe, Paola
+- Tintaya, Eugenia
 
-### DBSCAN
-Algoritmo basado en densidad que identifica grupos de puntos arbitrariamente formados. Permite la detección de ruido y no requiere especificar el número de clusters a priori.
+---
 
-## Documentación y Resultados
-
-Los resultados finales, conclusiones y análisis detallado se encuentran en el informe formal ubicado en la carpeta `docs/`. El documento principal (`main.tex`) está estructurado en las siguientes secciones:
-- Resumen y abstract
-- Introducción al problema
-- Estado del arte en clustering
-- Aplicación metodológica
-- Resultados y visualizaciones
-- Conclusiones y trabajo futuro
+*Proyecto realizado para la asignatura de Ciencia de Datos - IEEE format*
